@@ -6,7 +6,7 @@ type IStorage interface {
 	//CloseDB()
 
 	Order() IOrder
-	Service() IWashingService
+	WashingService() IWashingService
 	Customer() ICustomer
 }
 

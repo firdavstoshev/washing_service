@@ -11,20 +11,20 @@ import (
 	"gorm.io/gorm"
 )
 
-type serviceRepo struct {
+type washingServiceRepo struct {
 	ctx  context.Context
 	conn *gorm.DB
 }
 
-func newServiceRepository(ctx context.Context, conn *gorm.DB) *serviceRepo {
-	return &serviceRepo{ctx: ctx, conn: conn}
+func newWashingServiceRepository(ctx context.Context, conn *gorm.DB) *washingServiceRepo {
+	return &washingServiceRepo{ctx: ctx, conn: conn}
 }
 
-func (s *store) Service() storage.IWashingService {
+func (s *store) WashingService() storage.IWashingService {
 	return s.washingService
 }
 
-func (s *serviceRepo) GetWashingServices() ([]domain.Service, error) {
+func (s *washingServiceRepo) GetWashingServices() ([]domain.Service, error) {
 	var services []domain.Service
 	if err := s.conn.Preload("Type").Preload("Type.UnitType").Find(&services).Error; err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (s *serviceRepo) GetWashingServices() ([]domain.Service, error) {
 	return services, nil
 }
 
-func (s *serviceRepo) GetWashingServiceByID(id uint) (*domain.Service, error) {
+func (s *washingServiceRepo) GetWashingServiceByID(id uint) (*domain.Service, error) {
 	var service domain.Service
 	if err := s.conn.Preload("Type").Preload("Type.UnitType").First(&service, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

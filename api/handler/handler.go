@@ -22,8 +22,17 @@ func NewHandler(rep storage.IStorage, svc service.IService) *Handler {
 	return &Handler{rep: rep, svc: svc}
 }
 
+// @Summary Get all washing services
+// @Summary Get all washing services
+// @Description Get a list of all washing services
+// @Tags services
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} dto.ServiceDTO
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /services [get]
 func (h *Handler) GetServices(c *gin.Context) {
-	services, err := h.rep.Service().GetWashingServices()
+	services, err := h.rep.WashingService().GetWashingServices()
 	if err != nil {
 		errorJSON(c, http.StatusInternalServerError, err.Error())
 		return
@@ -50,6 +59,16 @@ func (h *Handler) GetServices(c *gin.Context) {
 	responseJSON(c, http.StatusOK, serviceDTOs)
 }
 
+// @Summary Create a new order
+// @Description Create an order with provided customer and service data
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param order body dto.OrderPriceRequest true "Order data"
+// @Success 201 {object} dto.CreateOrderResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /order [post]
 func (h *Handler) CreateOrder(c *gin.Context) {
 	var req dto.OrderPriceRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -90,6 +109,16 @@ func (h *Handler) CreateOrder(c *gin.Context) {
 	responseJSON(c, http.StatusCreated, dto.CreateOrderResponse{OrderID: orderId})
 }
 
+// @Summary Get order price
+// @Description Get order price based on provided customer and service data
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param order body dto.OrderPriceRequest true "Order data"
+// @Success 201 {object} dto.OrderPriceResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /order-price [post]
 func (h *Handler) OrderPrice(c *gin.Context) {
 	var req dto.OrderPriceRequest
 	if err := c.BindJSON(&req); err != nil {

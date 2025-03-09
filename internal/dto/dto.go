@@ -53,3 +53,7 @@ type OrderPriceRequest struct {
 type OrderPriceResponse struct {
 	Price float64 `json:"price"`
 }
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}

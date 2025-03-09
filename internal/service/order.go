@@ -46,7 +46,7 @@ func (o *orderService) OrderPrice(order *domain.Order, serviceItems *[]domain.Se
 	)
 
 	for _, item := range *serviceItems {
-		svc, err := o.storage.Service().GetWashingServiceByID(item.ServiceID)
+		svc, err := o.storage.WashingService().GetWashingServiceByID(item.ServiceID)
 		if err != nil {
 			return 0, err
 		}

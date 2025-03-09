@@ -1,0 +1,158 @@
+definitions:
+  github_com_firdavstoshev_washing_service_internal_dto.CreateOrderResponse:
+    properties:
+      order_id:
+        type: integer
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.OrderPriceRequest:
+    properties:
+      customer_id:
+        type: integer
+      express:
+        type: boolean
+      is_child_items:
+        type: boolean
+      services:
+        items:
+          $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.OrderService'
+        type: array
+      wait_days:
+        type: integer
+    required:
+    - customer_id
+    - services
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.OrderPriceResponse:
+    properties:
+      price:
+        type: number
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.OrderService:
+    properties:
+      quantity:
+        type: number
+      service_id:
+        type: integer
+    required:
+    - quantity
+    - service_id
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.ServiceDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ServiceTypeDTO'
+      type_id:
+        type: integer
+      unit_price:
+        type: number
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.ServiceTypeDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      unit_type:
+        $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.UnitTypeDTO'
+    type: object
+  github_com_firdavstoshev_washing_service_internal_dto.UnitTypeDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /order:
+    post:
+      consumes:
+      - application/json
+      description: Create an order with provided customer and service data
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.OrderPriceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.CreateOrderResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse'
+      summary: Create a new order
+      tags:
+      - orders
+  /order-price:
+    post:
+      consumes:
+      - application/json
+      description: Get order price based on provided customer and service data
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.OrderPriceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.OrderPriceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse'
+      summary: Get order price
+      tags:
+      - orders
+  /services:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all washing services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ServiceDTO'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_firdavstoshev_washing_service_internal_dto.ErrorResponse'
+      summary: Get all washing services
+      tags:
+      - services
+swagger: "2.0"

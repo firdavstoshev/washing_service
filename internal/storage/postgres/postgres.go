@@ -13,14 +13,14 @@ import (
 
 type store struct {
 	order          *orderRepo
-	washingService *serviceRepo
+	washingService *washingServiceRepo
 	customer       *customerRepo
 }
 
 func newStore(ctx context.Context, conn *gorm.DB) *store {
 	return &store{
 		order:          newOrderRepository(ctx, conn),
-		washingService: newServiceRepository(ctx, conn),
+		washingService: newWashingServiceRepository(ctx, conn),
 		customer:       newCustomerRepository(ctx, conn),
 	}
 }
