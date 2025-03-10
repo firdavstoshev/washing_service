@@ -3,7 +3,7 @@ package storage
 import "github.com/firdavstoshev/washing_service/internal/domain"
 
 type IStorage interface {
-	//CloseDB()
+	CloseDB() error
 
 	Order() IOrder
 	WashingService() IWashingService

@@ -12,6 +12,8 @@ import (
 )
 
 type store struct {
+	conn *gorm.DB
+
 	order          *orderRepo
 	washingService *washingServiceRepo
 	customer       *customerRepo
@@ -19,6 +21,7 @@ type store struct {
 
 func newStore(ctx context.Context, conn *gorm.DB) *store {
 	return &store{
+		conn:           conn,
 		order:          newOrderRepository(ctx, conn),
 		washingService: newWashingServiceRepository(ctx, conn),
 		customer:       newCustomerRepository(ctx, conn),
@@ -35,4 +38,13 @@ func NewStorage(ctx context.Context, cfg *config.PostgresConfig) storage.IStorag
 	}
 
 	return newStore(ctx, db)
+}
+
+func (s *store) CloseDB() error {
+	sqlDB, err := s.conn.DB()
+	if err != nil {
+		return err
+	}
+
+	return sqlDB.Close()
 }
