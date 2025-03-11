@@ -27,6 +27,7 @@ func main() {
 	defer cancel()
 
 	storage := postgres.NewStorage(ctx, &cfg.Postgres)
+	//storage.Migrate()
 	defer storage.CloseDB()
 
 	services := service.NewService(storage)
